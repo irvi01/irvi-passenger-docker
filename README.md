@@ -99,12 +99,3 @@ O `Dockerfile` foi projetado para:
 3. 🚀 Expandir a aplicação Flask com mais funcionalidades.
 4. 📊 Configurar logs e monitoramento para o Passenger.
 
----
-
-## **Contribuições**
-Contribuições são bem-vindas! Por favor, abra um pull request com suas sugestões ou melhorias.
-
----
-
-## **Licença**
-Este projeto é licenciado sob a [MIT License](LICENSE).
