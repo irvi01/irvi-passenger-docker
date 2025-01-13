@@ -2,14 +2,13 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
+    tags:
+      - 'v*' # Aciona a pipeline ao criar uma tag com o formato "v1.0.1"
     branches:
       - main
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,15 +20,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 3. Build da imagem Docker
+      # 3. Build da imagem Docker com a tag da versão
       - name: Build Docker Image
         run: |
-          docker build -t irvi-passenger-python:${{ github.sha }} .
+          docker build -t irvids/irvi-passenger-python:${{ github.ref_name }} .
 
       # 4. Testar a Imagem Docker
       - name: Test Docker Image
         run: |
-          docker run --rm -e PYTHONPATH=/opt/app irvi-passenger-python:${{ github.sha }} pytest app/tests/
+          docker run --rm -e PYTHONPATH=/opt/app irvids/irvi-passenger-python:${{ github.ref_name }} pytest app/tests/
 
       # 5. Login no Docker Hub
       - name: Log in to Docker Hub
@@ -38,12 +37,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 6. Tag da imagem para o Docker Hub
-      - name: Tag Docker Image
-        run: |
-          docker tag irvi-passenger-python:${{ github.sha }} irvids/irvi-passenger-python:latest
-
-      # 7. Push da imagem para o Docker Hub
+      # 6. Push da imagem para o Docker Hub com a tag da versão
       - name: Push Docker Image
         run: |
-          docker push irvids/irvi-passenger-python:latest
+          docker push irvids/irvi-passenger-python:${{ github.ref_name }}
