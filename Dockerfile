@@ -24,15 +24,25 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Definir o diretório de trabalho
 WORKDIR /opt/app
 
-# Copiar os arquivos do projeto para o container
-COPY . /opt/app
-
-# Instalar dependências Python
+# Copiar apenas o arquivo de requisitos inicialmente para cache eficiente
+COPY app/requirements.txt /opt/app/app/requirements.txt
 RUN pip3 install -r /opt/app/app/requirements.txt
+
+# Copiar o restante do código do projeto
+COPY . /opt/app
 
 # Configurar o PYTHONPATH e saída de logs sem buffer
 ENV PYTHONPATH=/opt/app
 ENV PYTHONUNBUFFERED=1
+ENV PASSENGER_LOG_FILE=/dev/stdout
+
+# Build argument para passar a versão da tag (usada apenas para documentar)
+ARG APP_VERSION=latest
+LABEL version=$APP_VERSION
+LABEL description="Imagem da aplicação com versão dinâmica via pipeline."
+
+# Expor a porta 80
+EXPOSE 80
 
 # Configurar o Passenger para rodar a aplicação
 CMD ["passenger", "start", "--port", "80", "--app-type", "python", "--startup-file", "passenger_wsgi.py"]

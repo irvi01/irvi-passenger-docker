@@ -58,7 +58,10 @@ jobs:
       # 7. Build da Imagem Docker com a Nova Tag
       - name: Build Docker Image
         run: |
-          docker build -t irvids/irvi-passenger-python:${{ env.new_tag }} .
+          docker build \
+            --build-arg APP_VERSION=${{ env.new_tag }} \
+            -t irvids/irvi-passenger-python:${{ env.new_tag }} \
+            .
           docker tag irvids/irvi-passenger-python:${{ env.new_tag }} irvids/irvi-passenger-python:latest
 
       # 8. Testar a Imagem Docker
