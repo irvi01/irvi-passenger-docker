@@ -44,4 +44,4 @@ jobs:
       - name: Push Docker Image
         run: |
           docker tag irvi-passenger-python:${{ github.sha }} irvi01/irvi-passenger-python:latest
-          docker push irvi01/irvi-passenger-python:latest
+          docker push irvids/irvi-passenger-python:latest
