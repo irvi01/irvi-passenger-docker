@@ -1,4 +1,5 @@
 from app import app, db
+from app.models import User, Item
 
 if __name__ == "__main__":
     with app.app_context():

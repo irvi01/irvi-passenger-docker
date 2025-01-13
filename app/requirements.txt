@@ -1,3 +1,5 @@
-flask==2.3.2
-flask_sqlalchemy==3.0.5
+Flask==2.3.2
+flask-sqlalchemy==3.0.5
+PyJWT==2.8.0
 pytest==7.4.0
+Werkzeug==2.3.7
