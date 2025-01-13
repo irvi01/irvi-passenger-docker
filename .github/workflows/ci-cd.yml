@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 2. Configurar Docker Buildx
+      # 2. Configuração do Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -29,9 +29,7 @@ jobs:
       # 4. Testar a Imagem Docker
       - name: Test Docker Image
         run: |
-          docker run --rm \
-            -e PYTHONPATH=/opt/app \
-            irvi-passenger-python:${{ github.sha }} pytest app/tests/
+          docker run --rm -e PYTHONPATH=/opt/app irvi-passenger-python:${{ github.sha }} pytest app/tests/
 
       # 5. Login no Docker Hub
       - name: Log in to Docker Hub
@@ -40,8 +38,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 6. Push da Imagem para o Docker Hub
+      # 6. Tag da imagem para o Docker Hub
+      - name: Tag Docker Image
+        run: |
+          docker tag irvi-passenger-python:${{ github.sha }} irvids/irvi-passenger-python:latest
+
+      # 7. Push da imagem para o Docker Hub
       - name: Push Docker Image
         run: |
-          docker tag irvi-passenger-python:${{ github.sha }} irvi01/irvi-passenger-python:latest
           docker push irvids/irvi-passenger-python:latest
