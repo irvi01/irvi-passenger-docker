@@ -30,5 +30,8 @@ COPY . /opt/app
 # Instalar dependências Python
 RUN pip3 install -r /opt/app/app/requirements.txt
 
+# Configurar o PYTHONPATH
+ENV PYTHONPATH=/opt/app
+
 # Configurar o Passenger para rodar a aplicação
 CMD ["passenger", "start", "--port", "80", "--app-type", "python", "--startup-file", "passenger_wsgi.py"]
