@@ -1,6 +1,8 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import os
+import logging
+import json_log_formatter
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -15,4 +17,26 @@ app.config['SECRET_KEY'] = '091020@Dy'
 # Inicialização do SQLAlchemy
 db = SQLAlchemy(app)
 
+# Configuração de logs estruturados em JSON
+formatter = json_log_formatter.JSONFormatter()
+json_handler = logging.StreamHandler()
+json_handler.setFormatter(formatter)
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.addHandler(json_handler)
+
+# Logar cada requisição recebida
+@app.before_request
+def log_request_info():
+    log_data = {
+        "message": "Nova requisição recebida",
+        "method": request.method,
+        "url": request.url,
+        "headers": {key: value for key, value in request.headers.items()},
+        "body": request.get_data(as_text=True)
+    }
+    app.logger.info(log_data)
+
+# Importação do app
 from app import routes
