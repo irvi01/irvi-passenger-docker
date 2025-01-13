@@ -33,7 +33,8 @@ jobs:
       - name: Calculate New Tag
         id: calculate_new_tag
         run: |
-          IFS='.' read -r major minor patch <<<"${{ env.latest_tag#v }}"
+          latest_tag=${{ env.latest_tag }}
+          IFS='.' read -r major minor patch <<<"${latest_tag#v}"
           patch=$((patch + 1))
           new_tag="v$major.$minor.$patch"
           echo "new_tag=$new_tag" >> $GITHUB_ENV
