@@ -43,6 +43,11 @@ jobs:
       # 5. Criar e Publicar a Nova Tag
       - name: Create and Push New Tag
         run: |
+          if git rev-parse --quiet --verify "refs/tags/${{ env.new_tag }}" >/dev/null; then
+            echo "Tag ${{ env.new_tag }} já existe. Substituindo..."
+            git tag -d ${{ env.new_tag }}
+            git push origin :refs/tags/${{ env.new_tag }}
+          fi
           git tag ${{ env.new_tag }}
           git push origin ${{ env.new_tag }}
 
