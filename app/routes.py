@@ -4,7 +4,6 @@ from app.models import Item, User
 import jwt
 import datetime
 from functools import wraps
-from time import time
 
 
 # Página inicial da aplicação.

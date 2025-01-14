@@ -1,0 +1,4 @@
+[flake8]
+per-file-ignores =
+    app/routes.py:F401
+    app/tests/test_monitoring.py:F401
