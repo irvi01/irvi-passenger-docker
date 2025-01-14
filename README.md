@@ -159,4 +159,4 @@ Os 📊 logs são gerados no formato JSON para fácil integração com sistemas 
 3. 🚀 Escalar a aplicação com balanceadores de carga.
 4. 📈 Integrar observabilidade com Grafana e Prometheus.
 
-Teste 2
+Teste 3
