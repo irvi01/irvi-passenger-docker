@@ -33,25 +33,20 @@ jobs:
       - name: Calculate New Tag
         id: calculate_new_tag
         run: |
-          latest_tag=${{ env.latest_tag }}
-          IFS='.' read -r major minor patch <<<"${latest_tag#v}"
-          patch=$((patch + 1))
-          new_tag="v$major.$minor.$patch"
-          echo "new_tag=$new_tag" >> $GITHUB_ENV
-          echo "Nova tag calculada: $new_tag"
-
-      # 5. Criar e Publicar a Nova Tag
-      - name: Create and Push New Tag
-        run: |
           git fetch --tags
           latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           echo "Última tag encontrada: $latest_tag"
           IFS='.' read -r major minor patch <<<"${latest_tag#v}"
           patch=$((patch + 1))
           new_tag="v$major.$minor.$patch"
+          echo "new_tag=$new_tag" >> $GITHUB_ENV
           echo "Nova tag calculada: $new_tag"
-          git tag "$new_tag"
-          git push origin "$new_tag"
+     
+      # 5. Criar e Publicar a Nova Tag
+      - name: Create and Push New Tag
+        run: |
+          git tag ${{ env.new_tag }}
+          git push origin ${{ env.new_tag }}
 
       # 6. Configurar Docker Buildx
       - name: Set up Docker Buildx
