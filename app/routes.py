@@ -1,10 +1,15 @@
-from flask import request, jsonify
+from flask import request, jsonify, send_from_directory
 from app import app, db
 from app.models import Item, User
 import jwt
 import datetime
 from functools import wraps
 from time import time
+
+# Página inicial da aplicação.
+@app.route("/")
+def serve_frontend():
+    return send_from_directory("static", "index.html")
 
 # Decorador para verificar se o token JWT é válido
 def token_required(f):

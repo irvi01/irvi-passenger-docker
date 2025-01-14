@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Irvi Passenger App - CRUD</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Gerenciamento de Itens</h1>
+
+    <!-- Botão para navegar para a tela de itens cadastrados -->
+    <button onclick="window.location.href='items.html'" class="btn-back">Ver Itens Cadastrados</button>
+
+    <div class="token-info">
+      <p>Token JWT: <span id="jwt-token"></span></p>
+    </div>
+
+    <!-- O restante do conteúdo do CRUD -->
+    <div class="card">
+      <h2>Criar Item</h2>
+      <input type="text" id="create-item-name" placeholder="Nome do Item">
+      <button id="create-item-btn">Criar</button>
+    </div>
+
+    <div class="card">
+      <h2>Listar Itens</h2>
+      <button id="list-items-btn">Listar</button>
+      <ul id="items-list"></ul>
+    </div>
+  </div>
+  <script src="/static/crud.js"></script>
+</body>
+</html>
