@@ -4,6 +4,7 @@ from app.models import Item, User
 import jwt
 import datetime
 from functools import wraps
+from time import time
 
 # Decorador para verificar se o token JWT é válido
 def token_required(f):
