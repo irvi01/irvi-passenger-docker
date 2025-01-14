@@ -1,18 +1,26 @@
-# **Irvi Passenger Docker**
+# **Irvi Passenger Application**
 
-## **Descrição**
-Este repositório contém uma imagem 🛊 Docker personalizada para executar aplicações 🔧 Python utilizando o Phusion Passenger como servidor de aplicação. O objetivo é criar um ambiente simples, flexível e escalável, ideal para aprendizado e exploração de conceitos de 📚 DevOps.
+## **Sobre o Projeto**
+Este repositório é um exemplo completo de aplicação **CRUD** integrada com autenticação JWT, logs estruturados e monitoramento utilizando Prometheus e Grafana. O objetivo é aprender durante a crição de um ambiente próximo ao de produção, com boas práticas de desenvolvimento e DevOps.
 
 ---
 
 ## **Funcionalidades**
-- ✅ Suporte ao Passenger com 🔧 Python.
-- ✅ Configuração baseada em 🇺🇸 Ubuntu 20.04.
-- ✅ 📄 Dockerfile modular e extensível.
-- ✅ Integração com 🔧 Flask para operações CRUD e autenticação JWT.
-- ✅ Configuração de 📊 logs estruturados no formato JSON.
-- ✅ 🏋️‍♂️ Testes automatizados integrados.
-- ✅ Pipeline CI/CD para build, testes, versionamento automático e deploy.
+- 🌐 API RESTful utilizando **Flask**.
+- 🔑 Autenticação JWT.
+- 🛠️ Operações completas de CRUD.
+- 📊 Monitoramento de métricas via Prometheus.
+- 📈 Dashboard configurável no Grafana.
+- 🧪 Testes automatizados com **pytest**.
+- 🔄 CI/CD utilizando GitHub Actions para build, testes e publicação.
+
+---
+
+## **Tecnologias Utilizadas**
+- **Python** (Flask, SQLAlchemy)
+- **Docker**
+- **Prometheus** e **Grafana**
+- **GitHub Actions**
 
 ---
 
@@ -23,16 +31,22 @@ irvi-passenger-docker/
 │   ├── __init__.py            # Configuração inicial do Flask e logs
 │   ├── models.py              # Definição de modelos (ORM)
 │   ├── routes.py              # Definição de rotas (CRUD e autenticação)
+│   ├── monitoring.py          # Métricas e monitoramento
 │   ├── requirements.txt       # Dependências da aplicação
 │   ├── tests/                 # Testes automatizados
 │   │   ├── __init__.py        # Inicialização dos testes
-│   │   └── test_routes.py     # Testes das rotas
+│   │   ├── test_routes.py     # Testes das rotas CRUD
+│   │   └── test_monitoring.py # Testes do monitoramento
+├── static/                    # Arquivos frontend (HTML, CSS, JS)
+├── templates/                 # Templates HTML (frontend integrado)
 ├── .github/
 │   └── workflows/
 │       └── ci-cd.yml          # Pipeline CI/CD
 ├── Dockerfile                 # Configuração da imagem Docker
+├── docker-compose.yml         # Orquestração do Docker
+├── prometheus.yml             # Configuração do Prometheus
 ├── main.py                    # Arquivo principal para inicializar a aplicação
-├── passenger_wsgi.py          # Arquivo de integração com Passenger
+├── passenger_wsgi.py          # Integração com Passenger
 └── README.md                  # Documentação do projeto
 ```
 
@@ -41,7 +55,7 @@ irvi-passenger-docker/
 ## **Configuração do Ambiente**
 
 ### **Requisitos**
-- 🐋 Docker instalado.
+- 🐋 Docker e Docker Compose instalados.
 - 🔗 Git configurado.
 
 ### **Clonar o Repositório**
@@ -54,109 +68,86 @@ cd irvi-passenger-docker
 
 ## **Como Usar**
 
-### **Build da Imagem Docker**
-Para construir a imagem 🛊 Docker, execute:
+### **Executar o Projeto com Docker Compose**
+Para iniciar todos os serviços (app, Prometheus e Grafana):
 ```bash
-docker build -t irvids/irvi-passenger-python .
+docker-compose up --build
 ```
+A aplicação estará disponível em [http://localhost:8080](http://localhost:8080).
 
-### **Executar o Container**
-Para rodar o 🛊 container, execute:
-```bash
-docker run -p 8080:80 irvids/irvi-passenger-python
-```
+### **Acessar o Grafana**
+- URL: [http://localhost:3000](http://localhost:3000)
+- Usuário: `admin`
+- Senha: `admin`
 
-Acesse a aplicação em [http://localhost:8080](http://localhost:8080).
+### **Acessar o Prometheus**
+- URL: [http://localhost:9090](http://localhost:9090)
 
 ---
 
 ## **Testes Automatizados**
 
 ### **Executar Testes Localmente**
-1. Certifique-se de que todas as 🔧 dependências estão instaladas:
+1. Certifique-se de que as dependências estão instaladas:
    ```bash
    pip install -r app/requirements.txt
    ```
-2. Execute os 🏋️‍♂️ testes:
+2. Execute os testes:
    ```bash
    pytest app/tests/
    ```
 
 ### **Executar Testes no Docker**
-1. Certifique-se de que a imagem 🛊 Docker está atualizada.
-2. Execute os testes diretamente no container:
-   ```bash
-   docker run --rm -e PYTHONPATH=/opt/app irvids/irvi-passenger-python pytest app/tests/
-   ```
+```bash
+docker-compose run app pytest app/tests/
+```
 
 ---
 
-## **Rotas Disponíveis**
+## **Monitoramento e Logs**
 
-### **Autenticação**
-- **POST /auth/register**: Registrar um novo usuário.
-  - Body JSON:
-    ```json
-    {
-      "username": "testuser",
-      "password": "password123"
-    }
-    ```
-- **POST /auth/login**: Realizar login e obter o token JWT.
-  - Body JSON:
-    ```json
-    {
-      "username": "testuser",
-      "password": "password123"
-    }
-    ```
+### **Métricas Disponíveis**
+- **HTTP Requests:**
+  - Total de requisições HTTP.
+  - Latência das requisições.
+- **Métricas Customizadas:**
+  - Total de usuários cadastrados.
+  - Total de itens no sistema.
+  - Uso de CPU e memória do sistema.
 
-### **Operações com Itens**
-- **GET /items**: Listar todos os itens (⛔️ requer autenticação).
-- **GET /items/{id}**: Obter detalhes de um item específico (⛔️ requer autenticação).
-- **POST /items**: Criar um novo item (⛔️ requer autenticação).
-  - Body JSON:
-    ```json
-    {
-      "name": "Novo Item"
-    }
-    ```
-- **PUT /items/{id}**: Atualizar um item existente (⛔️ requer autenticação).
-  - Body JSON:
-    ```json
-    {
-      "name": "Item Atualizado"
-    }
-    ```
-- **DELETE /items/{id}**: Deletar um item (⛔️ requer autenticação).
+### **Exposição de Métricas**
+As métricas estão disponíveis no endpoint:
+```plaintext
+GET /metrics
+```
+
+---
+
+## **Frontend**
+
+### **Páginas Disponíveis**
+1. **Login e Registro:**
+   - Página inicial para criação de conta e login.
+2. **CRUD:**
+   - Gerenciamento de itens: criar, listar, atualizar e deletar itens.
+
+### **Como Acessar**
+- Login e Registro: [http://localhost:8080](http://localhost:8080)
+- CRUD: Disponível após login bem-sucedido.
 
 ---
 
 ## **Pipeline CI/CD**
-A pipeline do 🔧 GitHub Actions realiza:
-1. **Build e Teste Automático**: Realiza o build da imagem Docker e executa os testes automatizados.
-2. **Versionamento Automático**: Incrementa automaticamente a versão baseada na última tag.
-3. **Deploy no 🛊 Docker Hub**: Publica a imagem Docker com a nova tag e como `latest`.
-
-### **Configuração**
-Certifique-se de configurar os seguintes segredos no repositório:
-- `DOCKER_USERNAME`: Seu usuário no Docker Hub.
-- `DOCKER_PASSWORD`: Sua senha ou token de acesso no Docker Hub.
-
----
-
-## **Configuração de Logs**
-Os 📊 logs são gerados no formato JSON para fácil integração com sistemas de monitoramento centralizados. Eles incluem informações como:
-- Método HTTP e URL da requisição.
-- Cabeçalhos e corpo da requisição.
-- Timestamps detalhados.
+O GitHub Actions realiza:
+1. **Build e Teste Automático:** Compilação da imagem Docker e execução dos testes.
+2. **Versionamento Automático:** Incremento automático de versão baseado na última tag.
+3. **Publicação no Docker Hub:** Publica a imagem com a tag gerada e a tag `latest`.
 
 ---
 
 ## **Melhorias Futuras**
-1. 🌟 Adicionar variáveis de ambiente para configurações dinâmicas.
-2. 📊 Expandir o monitoramento e logs centralizados.
-3. 🚀 Escalar a aplicação com balanceadores de carga.
-4. 📈 Integrar observabilidade com Grafana e Prometheus.
+- 🌟 Implementar autenticação mais robusta com OAuth.
+- 📤 Integração com serviços externos via APIs RESTful.
+- 🚀 Escalabilidade com Kubernetes.
+- 📊 Dashboards adicionais no Grafana para maior visibilidade.
 
-Teste 3
