@@ -10,9 +10,6 @@
   <div class="container">
     <h1>Gerenciamento de Itens</h1>
 
-    <!-- Botão para navegar para a tela de itens cadastrados -->
-    <button onclick="window.location.href='items.html'" class="btn-back">Ver Itens Cadastrados</button>
-
     <div class="token-info">
       <p>Token JWT: <span id="jwt-token"></span></p>
     </div>
@@ -21,13 +18,26 @@
     <div class="card">
       <h2>Criar Item</h2>
       <input type="text" id="create-item-name" placeholder="Nome do Item">
-      <button id="create-item-btn">Criar</button>
+      <button id="create-item-btn" onclick="createItem()">Criar</button>
     </div>
 
     <div class="card">
       <h2>Listar Itens</h2>
-      <button id="list-items-btn">Listar</button>
+      <button id="list-items-btn" onclick="listItems()">Listar</button>
       <ul id="items-list"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Atualizar Item</h2>
+      <input type="number" id="update-item-id" placeholder="ID do Item">
+      <input type="text" id="update-item-name" placeholder="Novo Nome do Item">
+      <button id="update-item-btn" onclick="updateItem()">Atualizar</button>
+    </div>
+
+    <div class="card">
+      <h2>Deletar Item</h2>
+      <input type="number" id="delete-item-id" placeholder="ID do Item">
+      <button id="delete-item-btn" onclick="deleteItem()">Deletar</button>
     </div>
   </div>
   <script src="/static/crud.js"></script>

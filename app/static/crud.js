@@ -1,6 +1,15 @@
 const API_BASE = "http://localhost:8080";
 const token = localStorage.getItem("jwt");
 
+// Verifique se o token está presente
+if (!token) {
+  alert("Por favor, faça login para acessar esta página.");
+  window.location.href = "index.html"; // Redireciona para a página de login
+}
+
+// Mostre o token na interface (opcional)
+document.getElementById("jwt-token").textContent = token;
+
 // Criar Item
 async function createItem() {
   const name = document.getElementById("create-item-name").value;
