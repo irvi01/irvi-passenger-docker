@@ -1,6 +1,7 @@
 import pytest
 from app import app, db
 
+
 @pytest.fixture
 def client():
     """Cria um cliente de teste para o Flask."""

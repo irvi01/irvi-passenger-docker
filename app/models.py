@@ -1,10 +1,12 @@
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 # Modelo para Item
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
+
 
 # Modelo para Usuário
 class User(db.Model):

@@ -64,8 +64,14 @@ jobs:
         run: |
           pip install flake8
           flake8 app --max-line-length=88 --exclude=__init__.py
+      
+      # 8.1 Rodar o Linter
+      - name: Run Linter with Black
+        run: |
+          pip install black
+          black . --check    
 
-      # 8. Executar Linting no Código Frontend
+      # 8.2 Executar Linting no Código Frontend
       - name: Run Frontend Linting
         run: |
           npm install eslint

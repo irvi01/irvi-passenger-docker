@@ -8,11 +8,11 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Configurações do Banco de Dados
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'app.db')}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{os.path.join(basedir, 'app.db')}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Chave secreta para geração de tokens JWT
-app.config['SECRET_KEY'] = '091020@Dy'
+app.config["SECRET_KEY"] = "091020@Dy"
 
 # Inicialização do SQLAlchemy
 db = SQLAlchemy(app)
@@ -26,6 +26,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(json_handler)
 
+
 # Logar cada requisição recebida
 @app.before_request
 def log_request_info():
@@ -34,9 +35,10 @@ def log_request_info():
         "method": request.method,
         "url": request.url,
         "headers": {key: value for key, value in request.headers.items()},
-        "body": request.get_data(as_text=True)
+        "body": request.get_data(as_text=True),
     }
     app.logger.info(log_data)
+
 
 # Importação do monitoring e rotas do app
 from app.monitoring import register_monitoring_routes
