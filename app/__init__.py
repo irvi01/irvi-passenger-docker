@@ -38,5 +38,9 @@ def log_request_info():
     }
     app.logger.info(log_data)
 
-# Importação do app
+# Importação do monitoring e rotas do app
+from app.monitoring import register_monitoring_routes
 from app import routes
+
+# Registro das rotas de monitoramento
+register_monitoring_routes(app)

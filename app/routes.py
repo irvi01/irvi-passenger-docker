@@ -5,12 +5,26 @@ import jwt
 import datetime
 from functools import wraps
 
+# Decorador para verificar se o token JWT é válido
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('x-access-token')
+        if not token:
+            return jsonify({"error": "Token ausente"}), 401
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            current_user = User.query.filter_by(id=data['id']).first()
+        except Exception:
+            return jsonify({"error": "Token inválido"}), 401
+        return f(current_user, *args, **kwargs)
+    return decorated
+
 # Rota para registrar um novo usuário
 @app.route('/auth/register', methods=['POST'])
 def register_user():
     """Rota para criar um novo usuário."""
     data = request.json
-
     username = data.get('username')
     password = data.get('password')
 
@@ -62,21 +76,6 @@ def login():
     except Exception as e:
         app.logger.error(f"Erro na rota /auth/login: {e}")
         return jsonify({"error": "Erro interno no servidor"}), 500
-
-# Decorador para verificar se o token JWT é válido
-def token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = request.headers.get('x-access-token')
-        if not token:
-            return jsonify({"error": "Token ausente"}), 401
-        try:
-            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-            current_user = User.query.filter_by(id=data['id']).first()
-        except Exception:
-            return jsonify({"error": "Token inválido"}), 401
-        return f(current_user, *args, **kwargs)
-    return decorated
 
 # Rota para listar todos os itens
 @app.route('/items', methods=['GET'])
