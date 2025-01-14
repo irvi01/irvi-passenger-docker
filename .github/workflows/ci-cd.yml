@@ -75,7 +75,7 @@ jobs:
       - name: Run Frontend Linting
         run: |
           npm install eslint
-          npx eslint static/*.js
+          npx eslint /static/*.js
 
       # 9. Build da Imagem Docker com a Nova Tag
       - name: Build Docker Image
