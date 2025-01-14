@@ -25,7 +25,7 @@ jobs:
         id: get_latest_tag
         run: |
           git fetch --tags
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          latest_tag=$(git tag --sort=-v:refname | head -n 1 || echo "v0.0.0")
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
           echo "Última tag: $latest_tag"
 
@@ -34,13 +34,22 @@ jobs:
         id: calculate_new_tag
         run: |
           git fetch --tags
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          latest_tag=$(git tag --sort=-v:refname | head -n 1 || echo "v0.0.0")
           echo "Última tag encontrada: $latest_tag"
           IFS='.' read -r major minor patch <<<"${latest_tag#v}"
-          patch=$((patch + 1))
-          new_tag="v$major.$minor.$patch"
-          echo "new_tag=$new_tag" >> $GITHUB_ENV
-          echo "Nova tag calculada: $new_tag"
+          while true; do
+            patch=$((patch + 1))
+            new_tag="v$major.$minor.$patch"
+
+            # Verificar se a tag já existe
+            if git rev-parse --quiet --verify "refs/tags/$new_tag" >/dev/null; then
+              echo "Tag $new_tag já existe. Tentando próxima..."
+            else
+              echo "Nova tag calculada: $new_tag"
+              echo "new_tag=$new_tag" >> $GITHUB_ENV
+              break
+            fi
+          done
      
       # 5. Criar e Publicar a Nova Tag
       - name: Create and Push New Tag
