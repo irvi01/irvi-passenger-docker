@@ -4,7 +4,8 @@ from app import db
 from app.models import Item
 from app.models import User
 import json
-import sys, os
+import sys
+import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
