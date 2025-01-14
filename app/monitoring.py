@@ -4,6 +4,8 @@ from app import db
 from app.models import User, Item
 import psutil
 from time import time
+from sqlalchemy import text
+
 # Métricas Prometheus
 REQUEST_COUNT = Counter('http_requests_total', 'Total de requisições HTTP', ['method', 'endpoint', 'status'])
 REQUEST_LATENCY = Histogram('http_request_duration_seconds', 'Duração das requisições HTTP', ['method', 'endpoint'])
@@ -12,13 +14,19 @@ TOTAL_ITEMS = Gauge('total_items', 'Número total de itens armazenados')
 CPU_USAGE = Gauge('cpu_usage_percent', 'Uso de CPU em porcentagem')
 MEMORY_USAGE = Gauge('memory_usage_bytes', 'Uso de memória em bytes')
 
+def update_custom_metrics():
+    """Atualiza métricas customizadas."""
+    TOTAL_USERS.set(User.query.count())
+    TOTAL_ITEMS.set(Item.query.count())
+    CPU_USAGE.set(psutil.cpu_percent())
+    MEMORY_USAGE.set(psutil.virtual_memory().used)
+
 def register_monitoring_routes(app):
     """Registra rotas relacionadas ao monitoramento."""
 
     @app.before_request
     def start_timer():
         """Inicia o temporizador manualmente."""
-        from time import time
         request.start_time = time()
 
     @app.after_request
@@ -31,12 +39,9 @@ def register_monitoring_routes(app):
         return response
 
     @app.before_request
-    def update_custom_metrics():
+    def update_metrics_before_request():
         """Atualiza métricas customizadas antes de cada requisição."""
-        TOTAL_USERS.set(User.query.count())
-        TOTAL_ITEMS.set(Item.query.count())
-        CPU_USAGE.set(psutil.cpu_percent())
-        MEMORY_USAGE.set(psutil.virtual_memory().used)
+        update_custom_metrics()
 
     @app.route('/metrics', methods=['GET'])
     def metrics():
@@ -47,7 +52,8 @@ def register_monitoring_routes(app):
     def health_check():
         """Verificar saúde do sistema."""
         try:
-            db.session.execute('SELECT 1')
+            db.session.execute(text('SELECT 1'))
             return jsonify({"status": "healthy"}), 200
         except Exception as e:
+            app.logger.error(f"Erro na verificação de saúde: {e}")
             return jsonify({"status": "unhealthy", "error": str(e)}), 500
