@@ -1,6 +1,8 @@
 import pytest
-from app import app, db
-from app.models import Item, User
+from app import app
+from app import db
+from app.models import Item
+from app.models import User
 import json
 import sys, os
 
