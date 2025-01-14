@@ -5,5 +5,5 @@ pytest==7.4.0
 Werkzeug==2.3.7
 json-log-formatter==0.5.2
 prometheus-client==0.16.0
-psutil==5.9.5
+psutil==5.9.7
 pytest-mock==3.10.0
