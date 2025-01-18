@@ -19,10 +19,12 @@ RUN curl -sSL https://oss-binaries.phusionpassenger.com/auto-software-signing-gp
     > /etc/apt/sources.list.d/passenger.list && \
     apt-get update && apt-get install -y passenger
 
-# Instalar Node.js (versão 18.x)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+# Instalar Node.js (versão 20.x)
+RUN apt-get update && apt-get install -y curl gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
-    npm install -g npm@latest
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 
 # Criar alias para python
 RUN ln -s /usr/bin/python3 /usr/bin/python
@@ -35,7 +37,7 @@ COPY app/requirements.txt /opt/app/app/requirements.txt
 RUN pip3 install -r /opt/app/app/requirements.txt
 
 # Copiar arquivos de dependências do Node.js
-COPY package.json package-lock.json /opt/app/
+COPY package.json /opt/app/
 RUN npm install
 
 # Copiar o restante do código do projeto
