@@ -98,7 +98,7 @@ jobs:
       # 11. Verificar Docker Compose
       - name: Verify Docker Compose Services
         run: |
-          docker-compose up -d
+          docker compose up -d
           curl -f http://localhost:9090/api/v1/status || exit 1
           curl -f http://localhost:3000 || exit 1
 
