@@ -1,7 +1,7 @@
 # **Irvi Passenger Application**
 
 ## **Sobre o Projeto**
-Este repositório é um exemplo completo de aplicação **CRUD** integrada com autenticação JWT, logs estruturados e monitoramento utilizando Prometheus e Grafana. O objetivo é aprender durante a crição de um ambiente próximo ao de produção, com boas práticas de desenvolvimento e DevOps.
+Este repositório é um exemplo completo de aplicação **CRUD** integrada com autenticação JWT, logs estruturados e monitoramento utilizando Prometheus e Grafana. O objetivo é aprender durante a criação de um ambiente próximo ao de produção, com boas práticas de desenvolvimento e DevOps.
 
 ---
 
@@ -11,44 +11,18 @@ Este repositório é um exemplo completo de aplicação **CRUD** integrada com a
 - 🛠️ Operações completas de CRUD.
 - 📊 Monitoramento de métricas via Prometheus.
 - 📈 Dashboard configurável no Grafana.
-- 🧪 Testes automatizados com **pytest**.
+- 🤧 Testes automatizados com **pytest**.
 - 🔄 CI/CD utilizando GitHub Actions para build, testes e publicação.
+- 🚀 Suporte a dependências frontend com **Node.js**.
 
 ---
 
 ## **Tecnologias Utilizadas**
 - **Python** (Flask, SQLAlchemy)
+- **Node.js e npm**
 - **Docker**
 - **Prometheus** e **Grafana**
 - **GitHub Actions**
-
----
-
-## **Estrutura do Projeto**
-```plaintext
-irvi-passenger-docker/
-├── app/
-│   ├── __init__.py            # Configuração inicial do Flask e logs
-│   ├── models.py              # Definição de modelos (ORM)
-│   ├── routes.py              # Definição de rotas (CRUD e autenticação)
-│   ├── monitoring.py          # Métricas e monitoramento
-│   ├── requirements.txt       # Dependências da aplicação
-│   ├── tests/                 # Testes automatizados
-│   │   ├── __init__.py        # Inicialização dos testes
-│   │   ├── test_routes.py     # Testes das rotas CRUD
-│   │   └── test_monitoring.py # Testes do monitoramento
-├── static/                    # Arquivos frontend (HTML, CSS, JS)
-├── templates/                 # Templates HTML (frontend integrado)
-├── .github/
-│   └── workflows/
-│       └── ci-cd.yml          # Pipeline CI/CD
-├── Dockerfile                 # Configuração da imagem Docker
-├── docker-compose.yml         # Orquestração do Docker
-├── prometheus.yml             # Configuração do Prometheus
-├── main.py                    # Arquivo principal para inicializar a aplicação
-├── passenger_wsgi.py          # Integração com Passenger
-└── README.md                  # Documentação do projeto
-```
 
 ---
 
@@ -57,12 +31,23 @@ irvi-passenger-docker/
 ### **Requisitos**
 - 🐋 Docker e Docker Compose instalados.
 - 🔗 Git configurado.
+- **Node.js** (versão 18 ou 20) instalado localmente.
 
 ### **Clonar o Repositório**
 ```bash
 git clone https://github.com/irvi01/irvi-passenger-docker.git
 cd irvi-passenger-docker
 ```
+
+### **Instalar Dependências**
+1. Instale dependências Python:
+   ```bash
+   pip install -r app/requirements.txt
+   ```
+2. Instale dependências Node.js:
+   ```bash
+   npm install
+   ```
 
 ---
 
@@ -121,6 +106,12 @@ As métricas estão disponíveis no endpoint:
 GET /metrics
 ```
 
+### **Endpoint de Saúde**
+Verifique se o backend está funcionando através do endpoint:
+```plaintext
+GET /health
+```
+
 ---
 
 ## **Frontend**
@@ -145,9 +136,36 @@ O GitHub Actions realiza:
 
 ---
 
+## **Estrutura do Projeto**
+```plaintext
+irvi-passenger-docker/
+├── app/
+│   ├── __init__.py            # Configuração inicial do Flask e logs
+│   ├── models.py              # Definição de modelos (ORM)
+│   ├── routes.py              # Definição de rotas (CRUD e autenticação)
+│   ├── monitoring.py          # Métricas e monitoramento
+│   ├── requirements.txt       # Dependências da aplicação
+│   ├── tests/                 # Testes automatizados
+│   │   ├── __init__.py        # Inicialização dos testes
+│   │   ├── test_routes.py     # Testes das rotas CRUD
+│   │   └── test_monitoring.py # Testes do monitoramento
+├── static/                    # Arquivos frontend (HTML, CSS, JS)
+├── templates/                 # Templates HTML (frontend integrado)
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml          # Pipeline CI/CD
+├── Dockerfile                 # Configuração da imagem Docker
+├── docker-compose.yml         # Orquestração do Docker
+├── prometheus.yml             # Configuração do Prometheus
+├── main.py                    # Arquivo principal para inicializar a aplicação
+├── passenger_wsgi.py          # Integração com Passenger
+└── README.md                  # Documentação do projeto
+```
+
+---
+
 ## **Melhorias Futuras**
 - 🌟 Implementar autenticação mais robusta com OAuth.
 - 📤 Integração com serviços externos via APIs RESTful.
 - 🚀 Escalabilidade com Kubernetes.
 - 📊 Dashboards adicionais no Grafana para maior visibilidade.
-
