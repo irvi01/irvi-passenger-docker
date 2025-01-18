@@ -1,0 +1,16 @@
+{
+  "name": "irvi-passenger-docker",
+  "version": "1.0.0",
+  "description": "Projeto integrando Flask com frontend.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "lint": "eslint 'app/static/*.js' --fix"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^9.18.0"
+  },
+  "author": "Seu Nome",
+  "license": "MIT"
+}

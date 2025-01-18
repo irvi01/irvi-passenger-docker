@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     python3 \
     python3-pip \
-    python3-dev && \
+    python3-dev \
+    build-essential && \
     rm -rf /var/lib/apt/lists/*
 
 # Instalar Passenger
@@ -17,6 +18,11 @@ RUN curl -sSL https://oss-binaries.phusionpassenger.com/auto-software-signing-gp
     echo "deb [trusted=yes] https://oss-binaries.phusionpassenger.com/apt/passenger focal main" \
     > /etc/apt/sources.list.d/passenger.list && \
     apt-get update && apt-get install -y passenger
+
+# Instalar Node.js (versão 18.x)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
 
 # Criar alias para python
 RUN ln -s /usr/bin/python3 /usr/bin/python
@@ -27,6 +33,10 @@ WORKDIR /opt/app
 # Copiar apenas o arquivo de requisitos inicialmente para cache eficiente
 COPY app/requirements.txt /opt/app/app/requirements.txt
 RUN pip3 install -r /opt/app/app/requirements.txt
+
+# Copiar arquivos de dependências do Node.js
+COPY package.json package-lock.json /opt/app/
+RUN npm install
 
 # Copiar o restante do código do projeto
 COPY . /opt/app
