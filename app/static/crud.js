@@ -1,6 +1,18 @@
 const API_BASE = "http://localhost:8080";
 const token = localStorage.getItem("jwt");
 
+try {
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  const isTokenExpired = payload.exp * 1000 < Date.now();
+  if (isTokenExpired) {
+    alert("Token expirado. Por favor, faça login novamente.");
+    window.location.href = "index.html";
+  }
+} catch (error) {
+  alert("Token inválido. Por favor, faça login novamente.");
+  window.location.href = "index.html";
+}
+
 // Verifique se o token está presente
 if (!token) {
   alert("Por favor, faça login para acessar esta página.");
