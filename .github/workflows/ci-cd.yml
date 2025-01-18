@@ -99,6 +99,7 @@ jobs:
       - name: Verify Docker Compose Services
         run: |
           docker compose up -d
+          sleep 10
           curl http://localhost:9090/-/ready || exit 1,
           curl -f http://localhost:3000 || exit 1
 
